@@ -1,0 +1,71 @@
+{
+  "configs": [
+    {
+      "windowClassName": "PPTFrameClass",
+      "buttons": [
+        {
+          "name": "prev",
+          "displayName": "上页",
+          "keyAction": "pageup"
+        },
+        {
+          "name": "next",
+          "displayName": "下页",
+          "keyAction": "pagedown"
+        }
+      ]
+    },
+    {
+      "windowClassName": "screenClass",
+      "buttons": [
+        {
+          "name": "prev",
+          "displayName": "向上",
+          "keyAction": "pageup"
+        },
+        {
+          "name": "next",
+          "displayName": "向下",
+          "keyAction": "pagedown"
+        },
+        {
+          "name": "refresh",
+          "displayName": "刷新",
+          "keyAction": "f5"
+        }
+      ]
+    },
+    {
+      "windowClassName": "Chrome_WidgetWin_1",
+      "buttons": [
+        {
+          "name": "prev",
+          "displayName": "后退",
+          "keyAction": "alt_left"
+        },
+        {
+          "name": "next",
+          "displayName": "前进",
+          "keyAction": "alt_right"
+        }
+      ]
+    }
+  ],
+  "defaultButtons": [
+    {
+      "name": "prev",
+      "displayName": "向左",
+      "keyAction": "left"
+    },
+    {
+      "name": "next",
+      "displayName": "向右",
+      "keyAction": "right"
+    },
+    {
+      "name": "digitalhuman",
+      "displayName": "数字人",
+      "keyAction": "none"
+    }
+  ]
+}
