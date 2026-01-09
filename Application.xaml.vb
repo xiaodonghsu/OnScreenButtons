@@ -39,8 +39,6 @@ Class Application
                                           Dim helper As New System.Windows.Interop.WindowInteropHelper(LeftWindow)
                                           LeftWindowHandle = helper.Handle
                                           leftWindowClassName = GetWindowClassName(LeftWindowHandle)
-                                          Debug.WriteLine($"[Application] 左侧窗口类名: {leftWindowClassName}, 句柄: {LeftWindowHandle}")
-                                          Console.WriteLine($"[Application] 左侧窗口类名: {leftWindowClassName}, 句柄: {LeftWindowHandle}")
 
                                           ' 两个窗口都加载完成后启动定时器
                                           StartTimerIfNeeded()
@@ -54,8 +52,6 @@ Class Application
                                            Dim helper As New System.Windows.Interop.WindowInteropHelper(RightWindow)
                                            RightWindowHandle = helper.Handle
                                            rightWindowClassName = GetWindowClassName(RightWindowHandle)
-                                           Debug.WriteLine($"[Application] 右侧窗口类名: {rightWindowClassName}, 句柄: {RightWindowHandle}")
-                                           Console.WriteLine($"[Application] 右侧窗口类名: {rightWindowClassName}, 句柄: {RightWindowHandle}")
 
                                            ' 两个窗口都加载完成后启动定时器
                                            StartTimerIfNeeded()
@@ -95,8 +91,6 @@ Class Application
            foregroundHwnd <> IntPtr.Zero AndAlso
            (foregroundHwnd <> CurrentForegroundWindow OrElse
             Not newClassName.Equals(CurrentForegroundWindowClassName, StringComparison.OrdinalIgnoreCase)) Then
-            Debug.WriteLine($"[Application] 前台窗口改变, 句柄: {foregroundHwnd}, 类名: '{newClassName}'")
-            Console.WriteLine($"[Application] 前台窗口改变, 句柄: {foregroundHwnd}, 类名: '{newClassName}'")
             CurrentForegroundWindow = foregroundHwnd
             CurrentForegroundWindowClassName = newClassName
             NotifyAllWindowsUpdate()
@@ -114,9 +108,6 @@ Class Application
     End Function
 
     Private Sub NotifyAllWindowsUpdate()
-        Debug.WriteLine($"[Application] 通知所有窗口更新按钮布局, 类名: '{CurrentForegroundWindowClassName}'")
-        Console.WriteLine($"[Application] 通知所有窗口更新按钮布局, 类名: '{CurrentForegroundWindowClassName}'")
-
         If LeftWindow IsNot Nothing Then
             LeftWindow.UpdateButtonLayoutFromGlobal(CurrentForegroundWindowClassName)
         End If

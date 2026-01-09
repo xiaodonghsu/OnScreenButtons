@@ -33,12 +33,8 @@ Class MainWindow
         Select Case position
             Case WindowPlacement.Left
                 Me.Left = 0
-                Debug.WriteLine("[MainWindow] 设置位置: 左侧")
-                Console.WriteLine("[MainWindow] 设置位置: 左侧")
             Case WindowPlacement.Right
                 Me.Left = SystemParameters.PrimaryScreenWidth - Me.Width
-                Debug.WriteLine("[MainWindow] 设置位置: 右侧")
-                Console.WriteLine("[MainWindow] 设置位置: 右侧")
         End Select
 
         ' 垂直居中
@@ -64,30 +60,19 @@ Class MainWindow
 
         ' 重新垂直居中
         Me.Top = (SystemParameters.PrimaryScreenHeight - Me.Height) / 2
-
-        Debug.WriteLine($"[MainWindow] 窗口高度已调整为: {Me.Height}")
-        Console.WriteLine($"[MainWindow] 窗口高度已调整为: {Me.Height}")
     End Sub
 
     ' 从全局变量更新按钮布局（被Application调用）
     Public Sub UpdateButtonLayoutFromGlobal(windowClassName As String)
-        Debug.WriteLine($"[MainWindow] {position} - 接收到更新请求, 窗口类名: '{windowClassName}'")
-        Console.WriteLine($"[MainWindow] {position} - 接收到更新请求, 窗口类名: '{windowClassName}'")
-
         UpdateButtonLayout(windowClassName)
     End Sub
 
     Private Sub UpdateButtonLayout(windowClassName As String)
-        Debug.WriteLine($"[MainWindow] {position} - 开始更新按钮布局, 类名: '{windowClassName}'")
-        Console.WriteLine($"[MainWindow] {position} - 开始更新按钮布局, 类名: '{windowClassName}'")
-
         ' 清空现有按钮
         ButtonPanel.Children.Clear()
 
         ' 检查配置是否加载成功
         If buttonConfig Is Nothing Then
-            Debug.WriteLine($"[MainWindow] {position} - 按钮配置未加载")
-            Console.WriteLine($"[MainWindow] {position} - 按钮配置未加载")
             Return
         End If
 

@@ -88,8 +88,6 @@ Public Class KeyController
 
     ' 构造函数（不需要参数，因为不再枚举窗口）
     Public Sub New()
-        Debug.WriteLine("[KeyController] KeyController 初始化")
-        Console.WriteLine("[KeyController] KeyController 初始化")
     End Sub
 
     ' 获取前台窗口的类名
@@ -103,12 +101,7 @@ Public Class KeyController
 
     ' 根据按键操作类型执行按键（接收窗口句柄参数）
     Public Sub ExecuteKeyAction(ByVal keyAction As String, ByVal targetWindowHandle As IntPtr)
-        Debug.WriteLine($"[ExecuteKeyAction] 执行按键操作: {keyAction}, 目标窗口句柄: {targetWindowHandle}")
-        Console.WriteLine($"[ExecuteKeyAction] 执行按键操作: {keyAction}, 目标窗口句柄: {targetWindowHandle}")
-
         If targetWindowHandle = IntPtr.Zero Then
-            Debug.WriteLine("[ExecuteKeyAction] 目标窗口句柄为空，跳过执行")
-            Console.WriteLine("[ExecuteKeyAction] 目标窗口句柄为空，跳过执行")
             Return
         End If
 
@@ -133,9 +126,6 @@ Public Class KeyController
                 SendKeyPressAlt(VK_RIGHT, targetWindowHandle)
             Case "none"
                 ' 不执行按键操作，用于数字人等功能
-            Case Else
-                Debug.WriteLine($"[ExecuteKeyAction] 未知的按键操作: {keyAction}")
-                Console.WriteLine($"[ExecuteKeyAction] 未知的按键操作: {keyAction}")
         End Select
     End Sub
 
@@ -146,10 +136,6 @@ Public Class KeyController
         End If
 
         Try
-            Dim currentForeground As IntPtr = GetForegroundWindow()
-            Debug.WriteLine($"[ActivateWindow] 激活前前台窗口: {currentForeground}")
-            Console.WriteLine($"[ActivateWindow] 激活前前台窗口: {currentForeground}")
-
             ' 获取当前前台窗口的线程ID
             Dim foregroundThread As Integer = GetWindowThreadProcessId(GetForegroundWindow(), IntPtr.Zero)
             Dim currentThread As Integer = Thread.CurrentThread.ManagedThreadId
@@ -161,28 +147,18 @@ Public Class KeyController
             Dim isMinimized As Boolean = IsIconic(hWnd)
 
             If isMinimized Then
-                Debug.WriteLine($"[ActivateWindow] 窗口已最小化，恢复窗口")
-                Console.WriteLine($"[ActivateWindow] 窗口已最小化，恢复窗口")
                 ShowWindow(hWnd, SW_RESTORE)
             End If
 
             ' 设置为前台窗口
-            Dim setResult As Boolean = SetForegroundWindow(hWnd)
-            Debug.WriteLine($"[ActivateWindow] SetForegroundWindow结果: {setResult}")
-            Console.WriteLine($"[ActivateWindow] SetForegroundWindow结果: {setResult}")
+            SetForegroundWindow(hWnd)
 
             ' 分离线程
             AttachThreadInput(currentThread, foregroundThread, False)
 
             ' 等待窗口激活
             Thread.Sleep(200)
-
-            Dim afterForeground As IntPtr = GetForegroundWindow()
-            Debug.WriteLine($"[ActivateWindow] 激活后前台窗口: {afterForeground}")
-            Console.WriteLine($"[ActivateWindow] 激活后前台窗口: {afterForeground}")
         Catch ex As Exception
-            Debug.WriteLine($"[ActivateWindow] 异常: {ex.Message}")
-            Console.WriteLine($"[ActivateWindow] 异常: {ex.Message}")
             ' 如果出错，至少尝试基本的激活
             Dim isMinimized As Boolean = IsIconic(hWnd)
             If isMinimized Then
@@ -230,26 +206,16 @@ Public Class KeyController
         inputs(3).ki.dwExtraInfo = IntPtr.Zero
 
         Dim result As Integer = SendInput(4, inputs(0), inputSize)
-        Debug.WriteLine($"[SendKeyPressAlt] 发送 Alt+{vk}, 结果: {result}")
-        Console.WriteLine($"[SendKeyPressAlt] 发送 Alt+{vk}, 结果: {result}")
     End Sub
 
     ' 发送按键 - 使用PostMessage直接发送到目标窗口
     Private Sub SendKeyPress(ByVal vk As Short, ByVal hWnd As IntPtr)
-        Debug.WriteLine($"[SendKeyPress] 尝试发送按键: {vk} 到窗口: {hWnd}")
-        Console.WriteLine($"[SendKeyPress] 尝试发送按键: {vk} 到窗口: {hWnd}")
-
         ' 方法1: 使用PostMessage发送WM_KEYDOWN和WM_KEYUP
         Dim keyDownResult As Boolean = PostMessage(hWnd, WM_KEYDOWN, New IntPtr(vk), IntPtr.Zero)
         Dim keyUpResult As Boolean = PostMessage(hWnd, WM_KEYUP, New IntPtr(vk), IntPtr.Zero)
 
-        Debug.WriteLine($"[SendKeyPress] PostMessage WM_KEYDOWN: {keyDownResult}, WM_KEYUP: {keyUpResult}")
-        Console.WriteLine($"[SendKeyPress] PostMessage WM_KEYDOWN: {keyDownResult}, WM_KEYUP: {keyUpResult}")
-
         ' 如果PostMessage成功，就不需要用SendInput了
         If keyDownResult AndAlso keyUpResult Then
-            Debug.WriteLine("[SendKeyPress] 使用PostMessage成功发送按键")
-            Console.WriteLine("[SendKeyPress] 使用PostMessage成功发送按键")
             Return
         End If
 
@@ -274,15 +240,6 @@ Public Class KeyController
         inputs(1).ki.dwExtraInfo = IntPtr.Zero
 
         Dim result As Integer = SendInput(2, inputs(0), inputSize)
-
-        If result = 0 Then
-            Dim lastError As Integer = Marshal.GetLastWin32Error()
-            Debug.WriteLine($"[SendKeyPress] SendInput失败! 结果: {result}, 错误代码: {lastError}")
-            Console.WriteLine($"[SendKeyPress] SendInput失败! 结果: {result}, 错误代码: {lastError}")
-        Else
-            Debug.WriteLine($"[SendKeyPress] SendInput成功发送按键: {vk}, 结果: {result}")
-            Console.WriteLine($"[SendKeyPress] SendInput成功发送按键: {vk}, 结果: {result}")
-        End If
     End Sub
 
     ' 获取窗口类名
